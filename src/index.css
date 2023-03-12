@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Climate+Crisis&family=Poppins:wght@400;500;700;900&family=Roboto&display=swap");
+
+* {
+  font-family: "Poppins", sans-serif;
+}
