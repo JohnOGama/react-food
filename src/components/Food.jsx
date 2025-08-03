@@ -83,6 +83,7 @@ function Food() {
                 key={index}
                 onClick={() =>
                   openModal({
+                    id: item.id,
                     title: item.name,
                     price: item.price,
                     image: item.image,

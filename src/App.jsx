@@ -5,6 +5,7 @@ import FoodCard from "./components/FoodCard";
 import Footer from "./components/Footer";
 import FoodModal from "./components/Modal/FoodModal";
 import { Fragment } from "react";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Food />
       <Footer />
       <FoodModal />
+      <Toaster position="top-center" />
     </Fragment>
   );
 }

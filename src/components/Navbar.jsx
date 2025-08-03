@@ -1,16 +1,46 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { AiOutlineSearch, AiOutlineMenu, AiFillTag } from "react-icons/ai";
-import { GiHamburgerMenu } from "react-icons/gi";
 import { BsFillCartFill, BsFillBagHeartFill } from "react-icons/bs";
 import { RiTruckFill } from "react-icons/ri";
 import { MdHelpCenter, MdRedeem } from "react-icons/md";
 import { FaWallet, FaTimes } from "react-icons/fa";
 import { useState } from "react";
+import useFoodStore from "../store/useFoodStore";
+import MainButton from "./MainButton";
 
 function Navbar() {
   const [nav, setNav] = useState(false);
+  const [isOrderCartOpen, setIsOrderCartOpen] = useState(false);
+
+  const modalRef = useRef();
+
+  const {
+    orderCartCount,
+    foodData,
+    clearCart,
+    getTotalPrice,
+    removeItemInCart,
+    updateQuantity,
+  } = useFoodStore();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef?.current && !modalRef?.current?.contains(event?.target)) {
+        setIsOrderCartOpen(false); // Make sure you have this state updater
+      }
+    };
+
+    if (isOrderCartOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOrderCartOpen]);
+
   return (
-    <div className="w-full py-2 shadow-md">
+    <div className="w-full py-2 shadow-md fixed top-0 z-20 inset-x-0 bg-white border-b border">
       <div className="max-w-[1200px] mx-auto items-center justify-between flex">
         <div className="flex items-center">
           <AiOutlineMenu
@@ -35,9 +65,68 @@ function Navbar() {
             className="bg-transparent font-medium focus:outline-none w-full"
           />
         </div>
-        <div className="cursor-pointer flex bg-black text-white items-center p-2 px-3 rounded-full mr-2">
+        <div
+          onClick={() => setIsOrderCartOpen((prev) => !prev)}
+          className="relative cursor-pointer flex bg-black text-white items-center p-2 px-3 rounded-full mr-2"
+        >
+          <div className="bg-red-500 text-white flex justify-center items-center rounded-full w-5 h-5 absolute top-[-5px] right-[-5px]">
+            {orderCartCount()}
+          </div>
           <BsFillCartFill className="mr-2" />
           <p>Cart</p>
+
+          {isOrderCartOpen && (
+            <div
+              ref={modalRef}
+              className=" w-[300px]  absolute top-full mt-4 right-0 rounded-md text-black bg-white border border-black/50 shadow-lg p-2"
+            >
+              <h1>Your Cart</h1>
+              <div className="space-y-2 overflow-y-auto h-[300px] scrollbar-hide">
+                {foodData.length === 0 && (
+                  <div className="flex justify-center items-center h-full">
+                    <h1>You don't have add to cart yet</h1>
+                  </div>
+                )}
+
+                {foodData.length > 0 &&
+                  foodData.map((item) => (
+                    <div className="flex gap-2 items-start">
+                      <div>
+                        <img
+                          src={item.image}
+                          alt={`${item.title}-${item.id}`}
+                          className="w-[120px] h-[80px] rounded-md object-cover whitespace-nowrap"
+                        />
+                      </div>
+                      <div className="flex justify-between items-center w-full">
+                        <div>
+                          <h1 className="text-lg font-bold">{item.title}</h1>
+                          <p className="text-orange-600 font-semibold">
+                            PHP {item.price}
+                          </p>
+                          <span
+                            onClick={() => removeItemInCart(item.id)}
+                            className="text-red-500"
+                          >
+                            Remove
+                          </span>
+                        </div>
+                        <p>x{item.quantity}</p>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+              {foodData.length !== 0 && (
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <h1>Total Price</h1>
+                    <p>PHP {getTotalPrice()}</p>
+                  </div>
+                  <MainButton onClick={clearCart}>Clear</MainButton>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         <div
