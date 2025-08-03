@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { data } from "../data/info.js";
+import useGlobalStore from "../store/useGlobalStore.js";
 
 function Food() {
+  const { openModal } = useGlobalStore();
+
   const [foods, setFoods] = useState(data);
   const filterType = (category) => {
     setFoods(
@@ -18,6 +21,7 @@ function Food() {
       })
     );
   };
+
   return (
     <div className="w-full max-w-[1200px] mx-auto mt-2">
       <h1 className="text-center font-bold text-2xl md:text-5xl xl:text-6xl">
@@ -76,8 +80,15 @@ function Food() {
           <div className="max-w-[1200px] mx-auto grid md:grid-cols-2 gap-5 xl:grid-cols-4 my-4 ">
             {foods.map((item, index) => (
               <div
-                className="relative w-full rounded-lg cursor-pointer "
                 key={index}
+                onClick={() =>
+                  openModal({
+                    title: item.name,
+                    price: item.price,
+                    image: item.image,
+                  })
+                }
+                className="relative w-full rounded-lg cursor-pointer "
               >
                 <div className="absolute bg-black/50 w-full h-full text-white pl-5 flex  justify-between items-end pb-4 pr-4 rounded-lg">
                   <p className="font-bold text-2xl md:text-lg xl:text-xl">
