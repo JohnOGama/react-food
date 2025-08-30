@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { AiOutlineSearch, AiOutlineMenu, AiFillTag } from "react-icons/ai";
 import { BsFillCartFill, BsFillBagHeartFill } from "react-icons/bs";
 import { RiTruckFill } from "react-icons/ri";
@@ -7,10 +7,12 @@ import { FaWallet, FaTimes } from "react-icons/fa";
 import { useState } from "react";
 import useFoodStore from "../store/useFoodStore";
 import MainButton from "./MainButton";
+import { AuthProviderContext } from "./Context/AuthProvider";
 
 function Navbar() {
   const [nav, setNav] = useState(false);
   const [isOrderCartOpen, setIsOrderCartOpen] = useState(false);
+  const { userData } = useContext(AuthProviderContext);
 
   const modalRef = useRef();
 
@@ -128,6 +130,12 @@ function Navbar() {
             </div>
           )}
         </div>
+
+        {!userData.is_authenticated && (
+          <div>
+            <a href={`http://localhost:3000/api/v1/auth/google`}>Login</a>
+          </div>
+        )}
 
         <div
           className={
