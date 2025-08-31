@@ -1,16 +1,19 @@
 import axios, {
   AxiosError,
-  AxiosRequestConfig,
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from "axios";
 import { getCookie } from "../helper/cookie.helper";
+import { BASE_URL } from "../../config/constant";
 
 const accessToken = getCookie("RF-accessToken");
 
+console.log("BASE_URL", BASE_URL);
+console.log("accessToken", accessToken);
+
 // Create axios instance
 const axiosClient = axios.create({
-  baseURL: "http://localhost:3000/api/v1",
+  baseURL: BASE_URL,
   timeout: 10000,
   withCredentials: true,
   headers: {
