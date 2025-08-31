@@ -39,9 +39,6 @@ const AuthWrapper = ({ children }: { children: ReactNode }) => {
         if (response.status === 200) {
           console.log("AuthProvider", response.data);
           setUserData({ ...response.data, is_authenticated: true });
-
-          // socket.emit("user-online", data?.data?.user_id);
-          // socket.emit("register", data?.data?.user_id);
         }
       } catch (error) {
         console.log("Error found", {

@@ -8,6 +8,7 @@ import { useState } from "react";
 import useFoodStore from "../store/useFoodStore";
 import MainButton from "./MainButton";
 import { AuthProviderContext } from "./Context/AuthProvider";
+import { BASE_URL } from "../config/constant";
 
 function Navbar() {
   const [nav, setNav] = useState(false);
@@ -133,7 +134,7 @@ function Navbar() {
 
         {!userData.is_authenticated && (
           <div>
-            <a href={`http://localhost:3000/api/v1/auth/google`}>Login</a>
+            <a href={`${BASE_URL}/auth/google`}>Login</a>
           </div>
         )}
 
